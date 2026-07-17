@@ -8,8 +8,8 @@
 - **Live demo:** https://specfork-build-week.holykinds.chatgpt.site
 - **Source code:** https://github.com/markmeow001/specfork-build-week
 - **License:** MIT
-- **Demo video:** `[ADD PUBLIC YOUTUBE URL — UNDER 3 MINUTES]`
-- **Codex Session ID:** `[ADD /feedback SESSION ID FROM THE PRIMARY BUILD SESSION]`
+- **Demo video:** https://youtu.be/WYlo6rxChFs
+- **Codex Session ID:** Provided directly in the Devpost submission form (not published in this repository)
 
 ## Short description
 
@@ -177,8 +177,7 @@ disagreement into one executable clarification.
 - [x] README with setup and testing instructions
 - [x] Credential-free judge experience
 - [x] Codex and GPT-5.6 usage explained
-- [ ] Public YouTube demo under three minutes
-- [ ] Demo audio explicitly explains Codex and GPT-5.6
-- [ ] `/feedback` Codex Session ID added
+- [x] Public YouTube demo under three minutes
+- [x] Demo audio explicitly explains Codex and GPT-5.6
+- [x] `/feedback` Codex Session ID retrieved for the Devpost form
 - [ ] Final Devpost form reviewed and submitted before the deadline
-

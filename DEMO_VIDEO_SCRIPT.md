@@ -115,13 +115,12 @@ before agents build it.”
 
 ## Recording acceptance check
 
-- [ ] Total duration is below 3:00
-- [ ] Video is public on YouTube
-- [ ] Voiceover explicitly says “Codex” and “GPT-5.6”
-- [ ] Public demo URL is visible or included in the description
-- [ ] GitHub URL is included in the description
-- [ ] No API key, `.env.local`, request credential, or private terminal content
+- [x] Total duration is below 3:00
+- [x] Video is public on YouTube: https://youtu.be/WYlo6rxChFs
+- [x] Voiceover explicitly says “Codex” and “GPT-5.6”
+- [x] Public demo URL is visible or included in the description
+- [x] GitHub URL is included in the description
+- [x] No API key, `.env.local`, request credential, or private terminal content
       appears in any frame
-- [ ] Demo, Live GPT, and recorded container evidence are not presented as the
+- [x] Demo, Live GPT, and recorded container evidence are not presented as the
       same execution mode
-

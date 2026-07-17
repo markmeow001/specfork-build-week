@@ -126,6 +126,7 @@ GPT-5.6 is used to generate divergent but reasonable interpretations of ambiguou
 Submission materials:
 
 - [Devpost submission draft](./DEVPOST_SUBMISSION.md)
+- [Public 2:40 demo video](https://youtu.be/WYlo6rxChFs)
 - [2:45 demo video script](./DEMO_VIDEO_SCRIPT.md)
 
 ## Current prototype boundary
