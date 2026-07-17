@@ -1,3 +1,5 @@
+import { parseAnalysisPayload } from "../../analysis-schema.mjs";
+
 type AnalysisResponse = {
   ticket: string;
   verdict: "red";
@@ -244,9 +246,10 @@ ${ticket}`;
     const outputText = extractOutputText(payload);
     if (!outputText) return Response.json(demoAnalysis(ticket));
 
-    const parsed = JSON.parse(
-      outputText.replace(/^```json\s*/i, "").replace(/\s*```$/, ""),
-    ) as Omit<AnalysisResponse, "ticket" | "verdict" | "source">;
+    const parsed = parseAnalysisPayload(
+      JSON.parse(outputText.replace(/^```json\s*/i, "").replace(/\s*```$/, "")),
+    );
+    if (!parsed) return Response.json(demoAnalysis(ticket));
 
     return Response.json({
       ...parsed,

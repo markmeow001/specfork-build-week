@@ -161,6 +161,7 @@ function runInContainer(worktree, nodeArgs) {
     try {
       execFileSync("docker", ["rm", "-f", containerName], {
         encoding: "utf8",
+        stdio: ["ignore", "pipe", "pipe"],
         timeout: 2000,
       });
       activeContainers.delete(containerName);

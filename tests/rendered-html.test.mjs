@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import { parseAnalysisPayload } from "../app/analysis-schema.mjs";
 import { deriveConflicts } from "../scripts/derive-conflicts.mjs";
 
 async function render(path = "/", init) {
@@ -193,4 +194,38 @@ test("returns 400 for a malformed JSON body", async () => {
   });
 
   assert.equal(response.status, 400);
+});
+
+test("validates live model analysis before it reaches the client", () => {
+  const valid = {
+    summary: "Three reasonable interpretations disagree.",
+    disagreement: ["Scope", "Format"],
+    forks: ["a", "b", "c"].map((id, index) => ({
+      id,
+      label: `Agent ${id.toUpperCase()}`,
+      intent: `Intent ${index + 1}`,
+      behavior: ["One", "Two", "Three", "Four"],
+      tests: 12 + index,
+      artifact: `contract${id.toUpperCase()}()`,
+    })),
+    question: {
+      prompt: "Which behavior should win?",
+      options: ["all", "filtered", "visible"].map((id) => ({
+        id,
+        label: id,
+        resolves: "scope",
+      })),
+    },
+  };
+
+  assert.deepEqual(parseAnalysisPayload(valid), valid);
+  assert.equal(parseAnalysisPayload({ ...valid, forks: valid.forks.slice(0, 2) }), null);
+  assert.equal(
+    parseAnalysisPayload({
+      ...valid,
+      question: { ...valid.question, options: [{ id: "only" }] },
+    }),
+    null,
+  );
+  assert.equal(parseAnalysisPayload({ ...valid, summary: 42 }), null);
 });
