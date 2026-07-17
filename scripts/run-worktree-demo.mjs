@@ -1,5 +1,5 @@
 import { execFileSync } from "node:child_process";
-import { createHash } from "node:crypto";
+import { createHash, randomBytes } from "node:crypto";
 import { cpSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
@@ -25,6 +25,39 @@ const proposals = proposalFile
   ? JSON.parse(readFileSync(proposalFile, "utf8")).map(reviewPatch)
   : null;
 let containerCounter = 0;
+
+// Per-run secret that signs the probe's result line so untrusted patch code
+// (which can call console.log / setTimeout but cannot read process.argv through
+// the policy gate) cannot forge or override the reported observation.
+const probeToken = randomBytes(16).toString("hex");
+
+// Containers created this run, so signal-driven termination can still remove
+// them. try/finally does NOT run when the process is killed by a signal (e.g.
+// the parent runner's execFileSync timeout sends SIGTERM), which would
+// otherwise orphan a running container and leak the temp repo.
+const activeContainers = new Set();
+
+function emergencyCleanup() {
+  for (const name of activeContainers) {
+    try {
+      execFileSync("docker", ["rm", "-f", name], {
+        stdio: "ignore",
+        timeout: 2000,
+      });
+    } catch {
+      // Best effort — we are already tearing down.
+    }
+  }
+  activeContainers.clear();
+  rmSync(tempRoot, { recursive: true, force: true });
+}
+
+for (const signal of ["SIGTERM", "SIGINT", "SIGHUP"]) {
+  process.on(signal, () => {
+    emergencyCleanup();
+    process.exit(signal === "SIGINT" ? 130 : 143);
+  });
+}
 
 const branches = [
   {
@@ -67,13 +100,19 @@ function git(args, cwd = repository) {
 }
 
 function parseProbe(stdout) {
-  const line = stdout.split("\n").findLast((item) => item.trim().startsWith("{"));
-  if (!line) throw new Error("Probe did not return JSON.");
-  return JSON.parse(line);
+  // Only trust the line the probe signed with the per-run token. Untrusted
+  // patch code can print arbitrary `{...}` lines (even deferred via setTimeout,
+  // which would win a plain findLast), but cannot produce the token because the
+  // gate blocks it from reading process.argv.
+  const prefix = `${probeToken} `;
+  const line = stdout.split("\n").findLast((item) => item.startsWith(prefix));
+  if (!line) throw new Error("Probe did not return a signed result line.");
+  return JSON.parse(line.slice(prefix.length));
 }
 
 function runInContainer(worktree, nodeArgs) {
   const containerName = `specfork-${process.pid}-${containerCounter++}`;
+  activeContainers.add(containerName);
   try {
     return run(
       "docker",
@@ -121,11 +160,22 @@ function runInContainer(worktree, nodeArgs) {
   } finally {
     try {
       execFileSync("docker", ["rm", "-f", containerName], {
-        stdio: "ignore",
+        encoding: "utf8",
         timeout: 2000,
       });
-    } catch {
-      // A successful --rm run leaves nothing to clean up.
+      activeContainers.delete(containerName);
+    } catch (error) {
+      const message = String(error?.stderr ?? error?.message ?? "");
+      if (/No such container/i.test(message)) {
+        // Benign: a successful --rm run already removed the container.
+        activeContainers.delete(containerName);
+      } else {
+        // A real failure (daemon busy, rm timeout) may leave a live container.
+        // Surface it and keep it tracked so emergencyCleanup retries on exit.
+        process.stderr.write(
+          `WARN: could not remove container ${containerName}: ${message.trim()}\n`,
+        );
+      }
     }
   }
 }
@@ -195,10 +245,17 @@ try {
     ]);
     const durationMs = Math.max(1, Math.round(performance.now() - testStarted));
     const normal = parseProbe(
-      executeNode(worktree, ["acceptance-probe.mjs"]),
+      executeNode(worktree, [
+        "acceptance-probe.mjs",
+        `--probe-token=${probeToken}`,
+      ]),
     );
     const large = parseProbe(
-      executeNode(worktree, ["acceptance-probe.mjs", "--large"]),
+      executeNode(worktree, [
+        "acceptance-probe.mjs",
+        `--probe-token=${probeToken}`,
+        "--large",
+      ]),
     );
 
     results.push({

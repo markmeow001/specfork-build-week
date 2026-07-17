@@ -9,7 +9,7 @@
     "dev": "WRANGLER_LOG_PATH=.wrangler/wrangler.log vinext dev",
     "build": "WRANGLER_LOG_PATH=.wrangler/wrangler.log vinext build",
     "start": "WRANGLER_LOG_PATH=.wrangler/wrangler.log vinext start",
-    "test": "npm run test:worktrees && npm run build && node --test tests/rendered-html.test.mjs",
+    "test": "npm run test:worktrees && npm run build && node --test tests/rendered-html.test.mjs tests/normalize-export.test.mjs",
     "test:worktrees": "node scripts/run-worktree-demo.mjs",
     "demo:worktrees": "node scripts/run-worktree-demo.mjs --json",
     "verify:sandbox": "node scripts/verify-container-sandbox.mjs",
