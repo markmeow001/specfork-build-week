@@ -177,9 +177,17 @@ OpenAI API → GPT-5.6 patch → policy gate → worktree → container
 - Live patch 成功進入 worktree 與 hardened container；
 - 第一次執行因舊版欄位格式測試失敗；
 - 行為正規化修正已完成並通過 Demo 驗證；
-- **修正後的 Live GPT 完整成功執行，尚待使用者重新執行確認。**
+- **2026-07-17 修正後的 Live GPT 完整鏈路已重新執行成功。**
 
-因此，目前不能宣稱「Live Run 已完整成功」。可以宣稱 Live 路徑已走到容器執行，最後一次成功確認仍待完成。
+最新 Live Run 可確認：
+
+- `status: completed`、`source: gpt-5.6`；
+- 3/3 model patches 通過 policy gate，0 rejected；
+- 三個 patch 分別寫入獨立 Git worktree 並產生 commit 與 SHA-256；
+- 三個 hardened containers 的 contract tests 全部通過；
+- 共推導出 10 個 observable conflicts；
+- containers 使用 network disabled、read-only root、all capabilities dropped、
+  `no-new-privileges` 與既定 CPU／memory／PID／timeout 限制。
 
 重新驗證指令：
 
@@ -206,12 +214,13 @@ npm run demo:agent-runner
 
 - production build；
 - lint，零警告；
-- 6 個網站與 API integration tests；
+- `npm test` 共 16 個 automated tests；
 - 3 個本機 Git worktree tests；
 - 3 個 hardened container contract tests；
 - sandbox boundary attack test；
 - malicious patch rejection test；
-- infinite-loop timeout and cleanup test。
+- infinite-loop timeout and cleanup test；
+- 修正後的 GPT-5.6 Live patch → gate → worktree → container 完整鏈路。
 
 常用驗證指令：
 
@@ -242,9 +251,9 @@ npm run demo:agent-runner
 
 ## 11. 建議下一步
 
-### P0：完成一次修正後的 Live Run
+### P0：完成一次修正後的 Live Run（已完成）
 
-重新執行 `npm run demo:agent-runner`，確認輸出同時包含：
+`npm run demo:agent-runner` 已確認輸出同時包含：
 
 - `status: completed`；
 - `source: gpt-5.6`；
@@ -273,4 +282,4 @@ npm run demo:agent-runner
 
 ## 12. 一句話總結目前做到哪裡
 
-SpecFork 已經從概念展示進展成一個具備真實 Git worktrees、模型 patch 安全閘門、hardened Docker execution、行為比較與規格收斂的可執行開發者工具；目前唯一尚未確認的核心技術步驟，是在行為正規化修正後重新完成一次 `source: gpt-5.6` 的 Live 成功執行。
+SpecFork 已經從概念展示進展成一個具備 GPT-5.6 Live patch generation、真實 Git worktrees、模型 patch 安全閘門、hardened Docker execution、行為比較、公開 Demo 與規格收斂的可執行開發者工具；目前主要剩餘工作是製作評審影片與提交素材，而不是補核心技術鏈路。

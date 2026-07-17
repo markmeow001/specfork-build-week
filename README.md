@@ -80,6 +80,10 @@ a temporary worktree, executes it only inside the hardened container, and emits
 request, commit, patch digest, policy, timing, test, and behavior evidence. With
 no key, it labels and runs the deterministic Demo source through the same path.
 
+The complete live path was verified on 2026-07-17: GPT-5.6 returned three
+proposals, all three passed the policy gate and their container contracts, and
+the runner derived 10 observable conflicts from their actual outputs.
+
 Non-terminating generated code is covered by:
 
 ```bash
