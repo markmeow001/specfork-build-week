@@ -302,8 +302,8 @@ commit series); this handoff is committed on top as a fourth docs commit:
 ae35e31  feat: initial SpecFork commit with review hardening             (C1 + H1 + M1 + H3 + H5 + whole project)
 ```
 
-- No remote configured yet (GitHub repo not created — PROJECT_STATUS P1). Nothing has
-  been pushed.
+- Public remote: `https://github.com/markmeow001/specfork-build-week`; `main` is
+  pushed and tracks `origin/main`.
 - `.gitignore` covers `node_modules`, `dist`, `.env*`, `.wrangler`, and (added this
   session) `tsconfig.tsbuildinfo`. `.env.local` is untracked.
 - Attribution intentionally omitted from commit messages (per global settings).

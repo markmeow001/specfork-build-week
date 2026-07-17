@@ -29,12 +29,12 @@ SPEC STATUS: RED
 
 目前已加入 MIT License，可以公開開源。
 
-目前尚未完成：
+目前公開交付：
 
-- 建立遠端 GitHub repository；
-- 第一次正式 commit；
-- 推送程式碼；
-- 建立公開 Demo URL。
+- GitHub：https://github.com/markmeow001/specfork-build-week
+- Demo：https://specfork-build-week.holykinds.chatgpt.site
+- Repository 已採 MIT License 並公開；
+- 公開 Demo 刻意不設定 `OPENAI_API_KEY`，完整流程使用明確標示的 Demo Mode。
 
 ## 3. 已完成的產品流程
 
@@ -237,7 +237,6 @@ npm run demo:agent-runner
 - GitHub、Linear 或 Jira integration；
 - 自動建立 Pull Request；
 - accounts、billing 與 persistent projects；
-- 線上 Sites deployment。
 
 目前唯一可執行 repository 是專案內附的 trusted reports-export fixture。
 
@@ -256,19 +255,16 @@ npm run demo:agent-runner
 - 3 個 passed contract results；
 - 10 個 observable conflicts（由 Runner 逐欄比對三分支輸出即時推導）。
 
-### P1：GitHub 與開源交付
+### P1：GitHub 與開源交付（已完成）
 
-- 建立 GitHub repository；
-- 做第一次正式 commit；
-- 推送程式碼；
-- 確認 MIT License；
-- 清理 README 安裝流程；
-- 加入 architecture 與 threat-model 圖；
-- 確認 `.env.local` 不會進入 Git。
+- 已建立並推送公開 GitHub repository；
+- 已確認 MIT License、README 安裝流程與 `.env.local` ignore；
+- 已確認 production build 不包含本機 OpenAI Key；
+- architecture 與 threat-model 圖可作為提交素材的後續加強項。
 
 ### P2：評審 Demo
 
-- 部署可操作網站；
+- 已部署並實測可操作的公開網站；
 - 錄製 90 秒至 3 分鐘 Demo；
 - 展示 `CODE GREEN / SPEC RED`；
 - 展示 Live GPT patch、policy gate、worktree、container 與行為衝突；

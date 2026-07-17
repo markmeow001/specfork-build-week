@@ -2,6 +2,9 @@
 
 > If two agents correctly follow your ticket and build different things, your ticket is broken.
 
+- **Live demo:** https://specfork-build-week.holykinds.chatgpt.site
+- **Source:** https://github.com/markmeow001/specfork-build-week
+
 SpecFork is an ambiguity-testing prototype for AI-assisted software development. It gives one product ticket to multiple independent interpretations, compares the observable behaviors they imply, and asks the single clarification question that removes the most uncertainty.
 
 ## Demo flow
@@ -90,6 +93,9 @@ node@sha256:16e22a550f3863206a3f701448c45f7912c6896a62de43add43bb9c86130c3e2
 ```
 
 The app includes a deterministic demo mode, so the complete flow works without credentials. When `OPENAI_API_KEY` is set, `/api/analyze` uses GPT-5.6 through the OpenAI Responses API.
+
+The public demo intentionally runs without `OPENAI_API_KEY`, so judges can complete
+the full deterministic flow without credentials or generating API spend.
 
 ## Local development
 
