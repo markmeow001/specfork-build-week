@@ -123,6 +123,11 @@ SpecFork was created as a new project during OpenAI Build Week. Codex was used t
 
 GPT-5.6 is used to generate divergent but reasonable interpretations of ambiguous requirements, identify observable disagreements, and select the clarification question with the highest disambiguation value.
 
+Submission materials:
+
+- [Devpost submission draft](./DEVPOST_SUBMISSION.md)
+- [2:45 demo video script](./DEMO_VIDEO_SCRIPT.md)
+
 ## Current prototype boundary
 
 This version demonstrates semantic forking, controlled behavior probes, real
